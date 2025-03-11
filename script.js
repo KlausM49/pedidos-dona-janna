@@ -5054,7 +5054,7 @@ function agregarProducto() {
 
 // Función para enviar el pedido sin redirigir
 function realizarPedido() {
-  const url = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec""; // Cambia por la URL de tu Web App de Google Sheets
+  const url = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec"; // Cambia por la URL de tu Web App de Google Sheets
   const datos = pedido[pedido.length - 1]; // Obtener el último producto agregado
 
   // Crear el objeto de datos
