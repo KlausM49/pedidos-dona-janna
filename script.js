@@ -5002,29 +5002,21 @@ const productos = [
   {"Codigo": "PT954", "Producto": "VINAGRE DE MANZANA"},
   {"Codigo": "PT999", "Producto": "SALSA CHINA A GRANEL"}
 ];
-
-// Array para almacenar los productos del pedido
 let pedido = [];
-let fechaEntrega = "";
 
-// Función para agregar un producto al pedido
 function agregarProducto() {
-  // Obtener los valores de los campos de formulario
+  // Obtener los valores del formulario
   const codigoProducto = document.getElementById("codigo_producto").value.trim();
   const cantidad = parseInt(document.getElementById("cantidad").value);
+  const fechaEntrega = document.getElementById("fecha_entrega").value;
+  const nombreCliente = document.getElementById("nombre_cliente").value;
 
   // Validaciones
-  if (!codigoProducto) {
-    alert("Por favor ingresa un código de producto.");
-    return;
-  }
-  
-  if (isNaN(cantidad) || cantidad <= 0) {
-    alert("Por favor ingresa una cantidad válida.");
+  if (!codigoProducto || !cantidad || !nombreCliente || !fechaEntrega) {
+    alert("Por favor completa todos los campos.");
     return;
   }
 
-  // Verificar si el código de producto existe en el arreglo 'productos'
   const producto = productos.find(prod => prod.Codigo === codigoProducto);
 
   if (producto) {
@@ -5032,7 +5024,6 @@ function agregarProducto() {
     const tabla = document.getElementById("tablaFactura").getElementsByTagName('tbody')[0];
     const nuevaFila = tabla.insertRow();
 
-    // Crear celdas para cada dato y agregarlas a la fila
     const celdaCodigo = nuevaFila.insertCell(0);
     const celdaProducto = nuevaFila.insertCell(1);
     const celdaCantidad = nuevaFila.insertCell(2);
@@ -5043,12 +5034,14 @@ function agregarProducto() {
 
     // Agregar el producto al arreglo del pedido
     pedido.push({
+      nombreCliente: nombreCliente,
       codigo: codigoProducto,
       cantidad: cantidad,
-      producto: producto.Producto
+      producto: producto.Producto,
+      fechaEntrega: fechaEntrega
     });
   } else {
-    alert("Producto no encontrado. Verifique el código del producto.");
+    alert("Producto no encontrado.");
   }
 
   // Limpiar los campos del formulario
@@ -5056,79 +5049,38 @@ function agregarProducto() {
   document.getElementById("cantidad").value = "";
 }
 
-// Función para realizar el pedido y enviarlo a Google Sheets
+// Función para enviar el pedido sin redirigir
 function realizarPedido() {
-  // Obtener la fecha de entrega
-  fechaEntrega = document.getElementById("fecha_entrega").value;
+  const url = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec"; // Cambia por la URL de tu Web App de Google Sheets
+  const datos = pedido[pedido.length - 1]; // Obtener el último producto agregado
 
-  // Validación de la fecha
-  if (!fechaEntrega) {
-    alert("Por favor, ingrese una fecha de entrega.");
-    return;
-  }
+  // Crear el objeto de datos
+  const requestData = {
+    nombreCliente: datos.nombreCliente,
+    codigoProducto: datos.codigo,
+    producto: datos.producto,
+    cantidad: datos.cantidad,
+    fechaEntrega: datos.fechaEntrega
+  };
 
-  // Verificar si el pedido tiene productos
-  if (pedido.length === 0) {
-    alert("No has agregado productos. Por favor, agrega productos antes de realizar el pedido.");
-    return;
-  }
-
-  // Confirmar pedido
-  const confirmacion = confirm("¿Deseas confirmar el pedido?");
-  
-  if (confirmacion) {
-    // Crear el objeto final del pedido
-    const pedidoFinal = {
-      fechaEntrega: fechaEntrega,
-      productos: pedido
-    };
-
-    // Enviar los datos a Google Sheets
-    enviarFormulario(pedidoFinal);
-    
-    alert("¡Pedido realizado con éxito!");
-
-    // Limpiar la tabla de la factura y el pedido
-    document.getElementById("tablaFactura").getElementsByTagName('tbody')[0].innerHTML = "";
-    pedido = [];
-    document.getElementById("fecha_entrega").value = ""; // Limpiar fecha de entrega
-  } else {
-    alert("El pedido no se ha realizado.");
-  }
-}
-
-// Función para enviar el formulario a Google Sheets usando un Google Form
-function enviarFormulario(pedido) {
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec"; // Cambia por tu URL de Google Form
-
-  // Datos a enviar
-  const fechaEntrada = document.createElement("input");
-  fechaEntrada.type = "hidden";
-  fechaEntrada.name = "entry.1234567890"; // Cambia por el ID de tu campo "Fecha de Entrega"
-  fechaEntrada.value = pedido.fechaEntrega;
-  form.appendChild(fechaEntrada);
-
-  pedido.productos.forEach((item, index) => {
-    const codigoEntrada = document.createElement("input");
-    codigoEntrada.type = "hidden";
-    codigoEntrada.name = `entry.XXXXXX${index}`; // Cambia por el ID de tu campo de código de producto
-    codigoEntrada.value = item.codigo;
-    form.appendChild(codigoEntrada);
-
-    const cantidadEntrada = document.createElement("input");
-    cantidadEntrada.type = "hidden";
-    cantidadEntrada.name = `entry.YYYYYY${index}`; // Cambia por el ID de tu campo de cantidad
-    cantidadEntrada.value = item.cantidad;
-    form.appendChild(cantidadEntrada);
+  // Enviar los datos con fetch()
+  fetch(url, {
+    method: "POST",
+    body: new URLSearchParams(requestData),
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert("¡Pedido realizado con éxito!"); // Muestra el mensaje sin redirigir
+    document.getElementById("formularioPedido").reset(); // Limpiar el formulario
+  })
+  .catch(error => {
+    alert("Hubo un error al realizar el pedido.");
+    console.error("Error al enviar los datos:", error);
   });
-
-  // Agregar el formulario al DOM y enviarlo
-  document.body.appendChild(form);
-  form.submit();
 }
 
-
-
-
+// Evitar la recarga de página al hacer submit
+function enviarPedido() {
+  agregarProducto();
+  return false;  // Esto previene que el formulario se envíe de la manera tradicional
+}
