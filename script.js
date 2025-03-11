@@ -5101,7 +5101,7 @@ function realizarPedido() {
 function enviarFormulario(pedido) {
   const form = document.createElement("form");
   form.method = "POST";
-  form.action = "https://docs.google.com/forms/d/e/1FAIpQLSfT9HQz5tqNKZx4VHpRRdyU7gGDbV_veJhjB5jjV3fzQQ34Uw/formResponse"; // Cambia por tu URL de Google Form
+  form.action = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec"; // Cambia por tu URL de Google Form
 
   // Datos a enviar
   const fechaEntrada = document.createElement("input");
