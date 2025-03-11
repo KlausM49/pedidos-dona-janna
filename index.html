@@ -11,13 +11,17 @@
     <img src="JANNA.PNG" alt="Logo de Doña Janna" width="300">
     <h1>PEDIDOS DOÑA JANNA</h1>
 
-    <!-- Nombre del Cliente -->
-    <label for="nombre_cliente">Nombre del Cliente:</label>
-    <input type="text" id="nombre_cliente" required class="campo">
-
-    <!-- Fecha de Entrega -->
-    <label for="fecha_entrega">Fecha de Entrega:</label>
-    <input type="date" id="fecha_entrega" required class="campo">
+    <!-- Contenedor para nombre del cliente y fecha de entrega -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="nombre_cliente">Nombre del Cliente:</label>
+        <input type="text" id="nombre_cliente" required class="campo">
+      </div>
+      <div class="form-group">
+        <label for="fecha_entrega">Fecha de Entrega:</label>
+        <input type="date" id="fecha_entrega" required class="campo">
+      </div>
+    </div>
 
     <!-- Formulario de pedido -->
     <form id="formularioPedido">
