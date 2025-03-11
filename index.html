@@ -18,36 +18,36 @@
     <input type="date" id="fecha_entrega" name="fecha_entrega" required>
 
     <!-- Formulario de pedido -->
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfT9HQz5tqNKZx4VHpRRdyU7gGDbV_veJhjB5jjV3fzQQ34Uw/formResponse" 
-          method="POST" id="formularioPedido" target="hidden_iframe" onsubmit="submitted=true;">
+    <form id="formularioPedido" onsubmit="return enviarFormulario();">
       <label for="codigo_producto">Código del Producto:</label>
-      <input type="text" id="codigo_producto" name="entry.1234567890" required>
+      <input type="text" id="codigo_producto" name="codigo_producto" required>
 
       <label for="cantidad">Cantidad:</label>
-      <input type="number" id="cantidad" name="entry.0987654321" min="1" required>
+      <input type="number" id="cantidad" name="cantidad" min="1" required>
 
-      <button type="submit">Realizar Pedido</button>
+      <button type="button" onclick="agregarProducto()">Agregar Producto</button>
     </form>
 
-    <!-- Mensaje de confirmación -->
-    <div id="confirmationMessage" style="display: none;">
-      <h3>¡Pedido realizado con éxito!</h3>
-    </div>
+    <!-- Factura y productos -->
+    <h2>Factura</h2>
+    <table id="tablaFactura">
+      <thead>
+        <tr>
+          <th>Código Producto</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se agregarán las filas de la factura -->
+      </tbody>
+    </table>
 
-    <iframe name="hidden_iframe" style="display: none;"></iframe>
+    <!-- Botón para realizar el pedido -->
+    <button type="button" onclick="realizarPedido()">Realizar Pedido</button>
   </div>
 
-  <script>
-    // Redirigir o mostrar mensaje cuando el formulario se envíe correctamente
-    var submitted = false;
-    document.getElementById("formularioPedido").onsubmit = function() {
-      if (submitted) {
-        document.getElementById("confirmationMessage").style.display = "block";
-      }
-    };
-  </script>
-
+  <!-- Enlazamos el script JS -->
   <script src="script.js"></script>
 </body>
 </html>
-
