@@ -5002,8 +5002,10 @@ const productos = [
   {"Codigo": "PT954", "Producto": "VINAGRE DE MANZANA"},
   {"Codigo": "PT999", "Producto": "SALSA CHINA A GRANEL"}
 ];
+
 let pedido = [];
 
+// Función para agregar productos a la tabla
 function agregarProducto() {
   // Obtener los valores del formulario
   const codigoProducto = document.getElementById("codigo_producto").value.trim();
@@ -5017,6 +5019,7 @@ function agregarProducto() {
     return;
   }
 
+  // Buscar el producto por su código
   const producto = productos.find(prod => prod.Codigo === codigoProducto);
 
   if (producto) {
@@ -5051,7 +5054,7 @@ function agregarProducto() {
 
 // Función para enviar el pedido sin redirigir
 function realizarPedido() {
-  const url = "https://script.google.com/macros/s/AKfycbyO6x7vcPJOOMCTNxQx_YPCPHN5L9xQ1stf8YCTsWCh7KpnxG0oXlCpYq-I1XT6_Tp_/exec"; // Cambia por la URL de tu Web App de Google Sheets
+  const url = "https://script.google.com/macros/s/AKfycbwBtwQm.../exec"; // Cambia por la URL de tu Web App de Google Sheets
   const datos = pedido[pedido.length - 1]; // Obtener el último producto agregado
 
   // Crear el objeto de datos
@@ -5077,10 +5080,4 @@ function realizarPedido() {
     alert("Hubo un error al realizar el pedido.");
     console.error("Error al enviar los datos:", error);
   });
-}
-
-// Evitar la recarga de página al hacer submit
-function enviarPedido() {
-  agregarProducto();
-  return false;  // Esto previene que el formulario se envíe de la manera tradicional
 }
