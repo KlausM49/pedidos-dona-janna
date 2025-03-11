@@ -5007,7 +5007,7 @@ const productos = [
 let pedido = [];
 let fechaEntrega = "";
 
-// Función que se ejecuta cuando se hace clic en el botón "Agregar Producto"
+// Función para agregar un producto al pedido
 function agregarProducto() {
   // Obtener los valores de los campos de formulario
   const codigoProducto = document.getElementById("codigo_producto").value.trim();
@@ -5056,7 +5056,7 @@ function agregarProducto() {
   document.getElementById("cantidad").value = "";
 }
 
-// Función para realizar el pedido
+// Función para realizar el pedido y enviarlo a Google Sheets
 function realizarPedido() {
   // Obtener la fecha de entrega
   fechaEntrega = document.getElementById("fecha_entrega").value;
@@ -5083,7 +5083,9 @@ function realizarPedido() {
       productos: pedido
     };
 
-    console.log("Pedido realizado:", pedidoFinal);
+    // Enviar los datos a Google Sheets
+    enviarFormulario(pedidoFinal);
+    
     alert("¡Pedido realizado con éxito!");
 
     // Limpiar la tabla de la factura y el pedido
@@ -5095,9 +5097,37 @@ function realizarPedido() {
   }
 }
 
+// Función para enviar el formulario a Google Sheets usando un Google Form
+function enviarFormulario(pedido) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "https://docs.google.com/forms/d/e/1FAIpQLSfT9HQz5tqNKZx4VHpRRdyU7gGDbV_veJhjB5jjV3fzQQ34Uw/formResponse"; // Cambia por tu URL de Google Form
 
+  // Datos a enviar
+  const fechaEntrada = document.createElement("input");
+  fechaEntrada.type = "hidden";
+  fechaEntrada.name = "entry.1234567890"; // Cambia por el ID de tu campo "Fecha de Entrega"
+  fechaEntrada.value = pedido.fechaEntrega;
+  form.appendChild(fechaEntrada);
 
+  pedido.productos.forEach((item, index) => {
+    const codigoEntrada = document.createElement("input");
+    codigoEntrada.type = "hidden";
+    codigoEntrada.name = `entry.XXXXXX${index}`; // Cambia por el ID de tu campo de código de producto
+    codigoEntrada.value = item.codigo;
+    form.appendChild(codigoEntrada);
 
+    const cantidadEntrada = document.createElement("input");
+    cantidadEntrada.type = "hidden";
+    cantidadEntrada.name = `entry.YYYYYY${index}`; // Cambia por el ID de tu campo de cantidad
+    cantidadEntrada.value = item.cantidad;
+    form.appendChild(cantidadEntrada);
+  });
+
+  // Agregar el formulario al DOM y enviarlo
+  document.body.appendChild(form);
+  form.submit();
+}
 
 
 
