@@ -20,7 +20,7 @@
     <input type="date" id="fecha_entrega" required class="campo">
 
     <!-- Formulario de pedido -->
-    <form id="formularioPedido" onsubmit="return enviarPedido();">
+    <form id="formularioPedido">
       <label for="codigo_producto">Código del Producto:</label>
       <input type="text" id="codigo_producto" required class="campo">
 
@@ -28,7 +28,7 @@
       <input type="number" id="cantidad" min="1" required class="campo">
 
       <!-- Botón para agregar productos a la factura -->
-      <button type="submit">Añadir Producto</button>
+      <button type="button" onclick="agregarProducto()">Añadir Producto</button>
     </form>
 
     <h2>Factura</h2>
